@@ -47,13 +47,20 @@ export default function Cronometro() {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#000" />
       <View>
-        <Text>CronometroApp</Text>
+        <Text style={styles.tituloCronometro}>CronometroApp</Text>
+        <Text style={styles.textoTopoPagina}>Atividade 2 - Módulo III</Text>
       </View>
+
       <View style={styles.cronometro}>
         <Text style={styles.cronometroContador}>
           {String(minutos).padStart(2, '0')}:{String(segundos).padStart(2, '0')}
         </Text>
       </View>
+      <FlatList
+        data={gravacoes}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <Text style={styles.registro}>{item}</Text>}
+      />
 
       <View style={styles.botoes}>
         <Pressable style={styles.btn} onPress={iniciarPausarCronometro}>
@@ -61,19 +68,18 @@ export default function Cronometro() {
         </Pressable>
 
         <Pressable style={styles.btn} onPress={pararCronometro}>
-        <Text style={styles.btnText}>Parar</Text>
-      </Pressable>
+          <Text style={styles.btnText}>Parar</Text>
+        </Pressable>
 
-      <Pressable style={[styles.btn, !contando && styles.btnDisabled]} onPress={gravar} disabled={!contando}>
-        <Text style={[styles.btnText, !contando && styles.btnTextDisabled]}>Gravar</Text>
-      </Pressable>
+        <Pressable style={[styles.btn, !contando && styles.btnDisabled]} onPress={gravar} disabled={!contando}>
+          <Text style={[styles.btnText, !contando && styles.btnTextDisabled]}>Gravar</Text>
+        </Pressable>
       </View>
 
-      <FlatList
-        data={gravacoes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <Text style={styles.registro}>{item}</Text>}
-      />
+
+      <View>
+        <Text style={styles.textoFimPagina}>Desenvolvido por Raul Ayrton Franco - Novembro de 2024</Text>
+      </View>
     </View>
   );
 }
@@ -89,15 +95,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'red'
   },
+  tituloCronometro: {
+    fontSize: 36,
+    color: '#fff',
+    textAlign: 'center'
+  },
+  textoTopoPagina: {
+    fontSize: 18,
+    color: '#fff',
+    textAlign: 'center'
+  },
   cronometro: {
     width: 200,
     height: 200,
     margin: 100,
     borderWidth: 2,
-    borderColor: '#00ff00',
+    borderColor: 'rgba(0, 255, 0, 0.3)',
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
 
   cronometroContador: {
@@ -113,12 +130,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   btn: {
-    borderColor: '#00ff00', 
-    borderWidth: 1, 
+    borderColor: 'rgba(0, 255, 0, 0.3)',
+    borderWidth: 2,
     borderRadius: 8,
-    paddingVertical: 10, 
-    paddingHorizontal: 20, 
-    backgroundColor: '#07ffde',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   btnText: {
     color: '#fff',
@@ -127,11 +144,11 @@ const styles = StyleSheet.create({
   },
 
   btnDisabled: {
-    borderColor: '#c7c7c7', 
-    borderWidth: 1, 
+    borderColor: '#c7c7c7',
+    borderWidth: 1,
     borderRadius: 8,
-    paddingVertical: 10, 
-    paddingHorizontal: 20, 
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: 'transparent',
   },
 
@@ -147,5 +164,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderRadius: 4,
     textAlign: 'center',
+  },
+  textoFimPagina: {
+    fontSize: 12,
+    fontStyle: 'italic',
+    color: '#fff'
   },
 });
