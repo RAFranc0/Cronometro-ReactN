@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Button, Pressable, FlatList, StyleSheet, StatusBar } from 'react-native';
 
 export default function Cronometro() {
   const [segundos, setSegundos] = useState(0);
   const [minutos, setMinutos] = useState(0);
   const [contando, setContando] = useState(false);
   const [gravacoes, setGravacoes] = useState([]);
-  const referenciaIntervalo = useRef(null); // Referência para o intervalo
+  const referenciaIntervalo = useRef(null);
 
   const iniciarPausarCronometro = () => {
     if (contando) {
-      clearInterval(referenciaIntervalo.current); // Pausa o cronômetro
+      clearInterval(referenciaIntervalo.current);
     } else {
       referenciaIntervalo.current = setInterval(() => {
         setSegundos((segundosAtual) => {
@@ -22,15 +22,15 @@ export default function Cronometro() {
         });
       }, 1000);
     }
-    setContando(!contando); // Alterna entre contando e pausado
+    setContando(!contando);
   };
 
   const pararCronometro = () => {
-    clearInterval(referenciaIntervalo.current); // Para o cronômetro
+    clearInterval(referenciaIntervalo.current);
     setContando(false);
     setSegundos(0);
     setMinutos(0);
-    setGravacoes([]); // Limpa os gravacoes
+    setGravacoes([]);
   };
 
   const gravar = () => {
@@ -45,6 +45,10 @@ export default function Cronometro() {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#000" />
+      <View>
+        <Text>CronometroApp</Text>
+      </View>
       <View style={styles.cronometro}>
         <Text style={styles.cronometroContador}>
           {String(minutos).padStart(2, '0')}:{String(segundos).padStart(2, '0')}
@@ -52,12 +56,17 @@ export default function Cronometro() {
       </View>
 
       <View style={styles.botoes}>
-        <Button
-          title={contando ? 'Pausar' : 'Iniciar'}
-          onPress={iniciarPausarCronometro}
-        />
-        <Button title="Parar" onPress={pararCronometro} />
-        <Button title="Registrar" onPress={gravar} disabled={!contando} />
+        <Pressable style={styles.btn} onPress={iniciarPausarCronometro}>
+          <Text style={styles.btnText}>{contando ? 'Pausar' : 'Iniciar'}</Text>
+        </Pressable>
+
+        <Pressable style={styles.btn} onPress={pararCronometro}>
+        <Text style={styles.btnText}>Parar</Text>
+      </Pressable>
+
+      <Pressable style={[styles.btn, !contando && styles.btnDisabled]} onPress={gravar} disabled={!contando}>
+        <Text style={[styles.btnText, !contando && styles.btnTextDisabled]}>Gravar</Text>
+      </Pressable>
       </View>
 
       <FlatList
@@ -72,31 +81,64 @@ export default function Cronometro() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#1f1f1f',
+    borderWidth: 1,
+    borderColor: 'red'
   },
   cronometro: {
     width: 200,
     height: 200,
-    margin: 10,
+    margin: 100,
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#00ff00',
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   cronometroContador: {
+    color: '#fff',
     fontSize: 48,
     fontWeight: 'bold',
   },
   botoes: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '40%',
+    justifyContent: 'space-between',
+    width: '90%',
     marginBottom: 24,
+    borderWidth: 1,
+  },
+  btn: {
+    borderColor: '#00ff00', 
+    borderWidth: 1, 
+    borderRadius: 8,
+    paddingVertical: 10, 
+    paddingHorizontal: 20, 
+    backgroundColor: '#07ffde',
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  btnDisabled: {
+    borderColor: '#c7c7c7', 
+    borderWidth: 1, 
+    borderRadius: 8,
+    paddingVertical: 10, 
+    paddingHorizontal: 20, 
+    backgroundColor: 'transparent',
+  },
+
+  btnTextDisabled: {
+    color: '#c7c7c7',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   registro: {
     fontSize: 16,
