@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Button, Pressable, FlatList, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, Pressable, FlatList, StatusBar } from 'react-native';
+import styles from './Cronometro.styles.js';
 
 export default function Cronometro() {
   const [segundos, setSegundos] = useState(0);
@@ -7,6 +8,7 @@ export default function Cronometro() {
   const [contando, setContando] = useState(false);
   const [gravacoes, setGravacoes] = useState([]);
   const referenciaIntervalo = useRef(null);
+  const flatListRef = useRef();
 
   const iniciarPausarCronometro = () => {
     if (contando) {
@@ -41,6 +43,7 @@ export default function Cronometro() {
       ...prevgravacoes,
       `#${prevgravacoes.length + 1} ${tempoFormatado}`,
     ]);
+    setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
   };
 
   return (
@@ -56,13 +59,18 @@ export default function Cronometro() {
           {String(minutos).padStart(2, '0')}:{String(segundos).padStart(2, '0')}
         </Text>
       </View>
-      <FlatList
-        data={gravacoes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <Text style={styles.registro}>{item}</Text>}
-      />
 
-      <View style={styles.botoes}>
+      <View style={styles.listaDeGravacoes}>
+        <Text style={styles.textoTopoPagina}>Lista de gravações</Text>
+        <FlatList
+          data={gravacoes}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <Text style={styles.gravacao}>{item}</Text>}
+          ref={flatListRef}
+        />
+      </View>
+
+      <View style={styles.btnBox}>
         <Pressable style={styles.btn} onPress={iniciarPausarCronometro}>
           <Text style={styles.btnText}>{contando ? 'Pausar' : 'Iniciar'}</Text>
         </Pressable>
@@ -83,91 +91,3 @@ export default function Cronometro() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#1f1f1f',
-    borderWidth: 1,
-    borderColor: 'red'
-  },
-  tituloCronometro: {
-    fontSize: 36,
-    color: '#fff',
-    textAlign: 'center'
-  },
-  textoTopoPagina: {
-    fontSize: 18,
-    color: '#fff',
-    textAlign: 'center'
-  },
-  cronometro: {
-    width: 200,
-    height: 200,
-    margin: 100,
-    borderWidth: 2,
-    borderColor: 'rgba(0, 255, 0, 0.3)',
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  },
-
-  cronometroContador: {
-    color: '#fff',
-    fontSize: 48,
-    fontWeight: 'bold',
-  },
-  botoes: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    marginBottom: 24,
-    borderWidth: 1,
-  },
-  btn: {
-    borderColor: 'rgba(0, 255, 0, 0.3)',
-    borderWidth: 2,
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  },
-  btnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  btnDisabled: {
-    borderColor: '#c7c7c7',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: 'transparent',
-  },
-
-  btnTextDisabled: {
-    color: '#c7c7c7',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  registro: {
-    fontSize: 16,
-    padding: 8,
-    backgroundColor: '#ddd',
-    marginBottom: 4,
-    borderRadius: 4,
-    textAlign: 'center',
-  },
-  textoFimPagina: {
-    fontSize: 12,
-    fontStyle: 'italic',
-    color: '#fff'
-  },
-});
