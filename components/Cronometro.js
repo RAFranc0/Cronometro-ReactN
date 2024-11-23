@@ -48,7 +48,7 @@ export default function Cronometro() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#000" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View>
         <Text style={styles.tituloCronometro}>CronometroApp</Text>
         <Text style={styles.textoTopoPagina}>Atividade 2 - Módulo III</Text>

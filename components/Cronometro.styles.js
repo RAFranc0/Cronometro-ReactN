@@ -58,11 +58,12 @@ const styles = StyleSheet.create({
     },
 
     btnDisabled: {
+        width: 100,
+        alignItems: 'center',
         borderColor: '#c7c7c7',
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 8,
         paddingVertical: 10,
-        paddingHorizontal: 20,
         backgroundColor: 'transparent',
     },
 
